@@ -11,7 +11,8 @@ import psycopg2.extras as extras
 
 
 dag_name = 'ETL pipeline'
-i
+dag_id = 'migrate_data'
+
 
 default_args = {
     'owner': 'airflow',    
