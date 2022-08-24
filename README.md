@@ -43,6 +43,8 @@ CREATE TABLE table_num (id INT NOT NULL, creation_date VARCHAR(250) NOT NULL, sa
 INSERT INTO table_num (id, creation_date, sale_value) values(0, '12-12-21','1000'),(1, '13-12-21','2000'),(2, '14-12-21','3000'),
 (3, '15-12-21','4000') ;  (Insert sample records)
 
+Note : This step is run independently because there can be different ways of loading data into sorce postgres db
+
 SELECT * FROM table_num; (check and verify the records in source db)
 
 7. Now, access the airflow and trigger the dag with dag_id = 'migrate_data'
