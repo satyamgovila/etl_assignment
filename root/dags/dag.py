@@ -11,8 +11,7 @@ import psycopg2.extras as extras
 
 
 dag_name = 'ETL pipeline'
-dag_id = 'migrate_data'
-
+i
 
 default_args = {
     'owner': 'airflow',    
@@ -71,6 +70,12 @@ def run_etl_process():
     tuples = [tuple(x) for x in df.to_numpy()]
     cols = ','.join(list(df.columns))
 
+    create_table_query = """
+        CREATE TABLE table_num (id INT NOT NULL, creation_date VARCHAR(250) NOT NULL, sale_value VARCHAR(250) NOT NULL);
+    """
+
+    cur2.execute(create_table_query)
+
     query = "INSERT INTO %s(%s) VALUES %%s" % ("table_num", cols) # insert to DB rows
 
     try:
@@ -82,7 +87,8 @@ def run_etl_process():
         cur2.close()
         return 1
     print("--data migration complete")
-    
+
+
 
 with DAG(dag_id=dag_id,
          default_args=default_args,
@@ -93,9 +99,14 @@ with DAG(dag_id=dag_id,
          ) as dag:
 
     dummy_start = DummyOperator(task_id="start", dag=dag)
-    
+
     etl_task = PythonOperator(task_id='source', python_callable=run_etl_process, dag=dag)
     
     # dest_task = PythonOperator(task_id='dest', python_callable=conn_source, dag=dag)
 
 dummy_start >> etl_task
+
+
+
+
+ 
